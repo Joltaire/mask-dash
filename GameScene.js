@@ -1,4 +1,4 @@
-import { gameover } from "/gameover.js";
+import { gameover } from "./gameover.js";
 export { GameScene };
 
 var player; //personagem
