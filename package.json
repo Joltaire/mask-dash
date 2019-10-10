@@ -8,13 +8,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codesandbox-app/static-template.git"
+    "url": "git+https://github.com/joltaire/mask-dash.git"
   },
-  "keywords": [
-    "static",
-    "template",
-    "codesandbox"
-  ],
+  "keywords": ["static", "template", "codesandbox"],
   "author": "Ives van Hoorne",
   "license": "MIT",
   "bugs": {
