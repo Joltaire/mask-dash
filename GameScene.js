@@ -26,7 +26,7 @@ GameScene.preload = function() {
   this.load.image("ground", "assets/ground.png"); //chão principal
   this.load.image("platform", "assets/platform.png"); //plataformas
   this.load.image("platformsmall", "assets/platformsmall.png"); //plataformas pequenas
-  this.load.spritesheet("player", "assets/Hollow.png", {
+  this.load.spritesheet("player", "assets/Bunny.png", {
     frameWidth: 40,
     frameHeight: 96
   });
