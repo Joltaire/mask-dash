@@ -2,17 +2,23 @@ import { gameover } from "./gameover.js";
 export { GameScene };
 
 var player; //personagem
+var player2; //personagem secundário
 var ground; //chão principal
 var platform; //plataformas
 var platformsmall; //plataformas pequenas
 var cursors;
 var spike;
+var keyW;
+var keyA;
+var keyS;
+var keyD;
 var song;
 var jump;
 var pointer;
 //var touchX;
 //var touchY;
-//var scoreText;
+var scoreText;
+var score = 500000;
 var graphics;
 var gameOver = false;
 var moveCam = false;
@@ -27,6 +33,10 @@ GameScene.preload = function() {
   this.load.image("platform", "assets/platform.png"); //plataformas
   this.load.image("platformsmall", "assets/platformsmall.png"); //plataformas pequenas
   this.load.spritesheet("player", "assets/Bunny.png", {
+    frameWidth: 40,
+    frameHeight: 96
+  });
+  this.load.spritesheet("player2", "assets/Oni.png", {
     frameWidth: 40,
     frameHeight: 96
   });
@@ -67,24 +77,67 @@ GameScene.create = function() {
   player.setBounce(0);
   player.setCollideWorldBounds(false);
 
+  player2 = this.physics.add.sprite(215, 1000, "player2"); //fren
+  player2.setBounce(0);
+  player2.setCollideWorldBounds(false);
+
   //animações
   this.anims.create({
     key: "left",
-    frames: this.anims.generateFrameNumbers("player", { start: 2, end: 6 }),
+    frames: this.anims.generateFrameNumbers("player", {
+      start: 2,
+      end: 6
+    }),
     frameRate: 13,
     repeat: -1
   });
 
   this.anims.create({
     key: "turn",
-    frames: this.anims.generateFrameNumbers("player", { start: 0, end: 1 }),
+    frames: this.anims.generateFrameNumbers("player", {
+      start: 0,
+      end: 1
+    }),
     frameRate: 3,
     repeat: -1
   });
 
   this.anims.create({
     key: "right",
-    frames: this.anims.generateFrameNumbers("player", { start: 7, end: 11 }),
+    frames: this.anims.generateFrameNumbers("player", {
+      start: 7,
+      end: 11
+    }),
+    frameRate: 13,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: "left2",
+    frames: this.anims.generateFrameNumbers("player2", {
+      start: 2,
+      end: 6
+    }),
+    frameRate: 13,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: "turn2",
+    frames: this.anims.generateFrameNumbers("player2", {
+      start: 0,
+      end: 1
+    }),
+    frameRate: 3,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: "right2",
+    frames: this.anims.generateFrameNumbers("player2", {
+      start: 7,
+      end: 11
+    }),
     frameRate: 13,
     repeat: -1
   });
@@ -95,15 +148,26 @@ GameScene.create = function() {
     frameRate: 10,
     repeat: -1
   });*/
-
+  scoreText = this.add.text(16, 16, "score: 0", {
+    fontSize: "32px",
+    fill: "#000"
+  });
   //colisões: "objeto [x] colide com [x]"
   this.physics.add.collider(player, ground);
   this.physics.add.collider(player, platform);
   this.physics.add.collider(player, platformsmall);
+  this.physics.add.collider(player2, ground);
+  this.physics.add.collider(player2, platform);
+  this.physics.add.collider(player2, platformsmall);
 
   this.physics.add.collider(player, spike, hitSpike, null, this);
+  this.physics.add.collider(player2, spike, hitSpike, null, this);
 
   cursors = this.input.keyboard.createCursorKeys(); //pros botão funcionar
+  keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+  keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+  keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+  keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
   this.cameras.main.setBounds(0, 0);
@@ -204,7 +268,37 @@ GameScene.update = function() {
   if (cursors.down.isDown) {
     player.setVelocityY(1500);
   }
+  if (keyA.isDown) {
+    player2.setVelocityX(-600);
+
+    player2.anims.play("left2", true);
+  } else if (keyD.isDown) {
+    player2.setVelocityX(600);
+
+    player2.anims.play("right2", true);
+  } else {
+    player2.setVelocityX(0);
+
+    player2.anims.play("turn2", true);
+  }
+
+  if (keyW.isDown && player2.body.touching.down) {
+    player2.setVelocityY(-800);
+    jump.play({
+      loop: false
+    });
+  }
+
+  if (keyS.isDown) {
+    player2.setVelocityY(1500);
+  }
 };
+
+function scoreCount() {
+  //  Add and update the score
+  score += 10;
+  scoreText.setText("Score: " + score);
+}
 
 function hitSpike(player, spike) {
   this.physics.pause();
