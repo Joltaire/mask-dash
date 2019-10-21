@@ -14,11 +14,13 @@ var keyS;
 var keyD;
 var song;
 var jump;
+var stun;
 var pointer;
 //var touchX;
 //var touchY;
 var scoreText;
-var score = 500000;
+var score = 50000;
+var timedEvent;
 var graphics;
 var gameOver = false;
 var moveCam = false;
@@ -59,6 +61,15 @@ GameScene.create = function() {
   song.play({
     loop: true
   });
+  this.physics.world.setBounds(0, 0, 2000 * 2, 575 * 2);
+
+  //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
+  timedEvent = this.time.addEvent({
+    delay: 100,
+    callback: reduzirScore,
+    callbackScope: this,
+    repeat: 10000
+  });
 
   ground = this.physics.add.staticGroup();
   platform = this.physics.add.staticGroup();
@@ -67,19 +78,20 @@ GameScene.create = function() {
 
   ground.create(600, 1270, "ground"); //chão
   ground.create(1800, 1270, "ground");
+  ground.create(3000, 1270, "ground");
   platformsmall.create(500, 900, "platformsmall");
   platform.create(1000, 650, "platform");
   spike.create(800, 1050, "spike");
 
-  //powerupstun = this.add.sprite(350, 470, "stun");
+  stun = this.physics.add.sprite(500, 840, "stun");
   player = this.physics.add.sprite(200, 1000, "player"); //você :)
 
   player.setBounce(0);
-  player.setCollideWorldBounds(false);
+  player.setCollideWorldBounds(true);
 
   player2 = this.physics.add.sprite(215, 1000, "player2"); //fren
   player2.setBounce(0);
-  player2.setCollideWorldBounds(false);
+  player2.setCollideWorldBounds(true);
 
   //animações
   this.anims.create({
@@ -141,17 +153,21 @@ GameScene.create = function() {
     frameRate: 13,
     repeat: -1
   });
-  /*
+
   this.anims.create({
-    key: "powerupstun",
+    key: "stun",
     frames: this.anims.generateFrameNumbers("stun", { start: 0, end: 7 }),
     frameRate: 10,
     repeat: -1
-  });*/
-  scoreText = this.add.text(16, 16, "score: 0", {
-    fontSize: "32px",
-    fill: "#000"
   });
+  scoreText = this.add
+    .text(-175, -150, "score: 50000", {
+      fontSize: "32px",
+      fill: "#000"
+    })
+    .setScrollFactor(0);
+
+  //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
   //colisões: "objeto [x] colide com [x]"
   this.physics.add.collider(player, ground);
   this.physics.add.collider(player, platform);
@@ -163,6 +179,11 @@ GameScene.create = function() {
   this.physics.add.collider(player, spike, hitSpike, null, this);
   this.physics.add.collider(player2, spike, hitSpike, null, this);
 
+  this.physics.add.collider(stun, platform);
+  this.physics.add.collider(stun, platformsmall);
+  this.physics.add.overlap(player, stun, collectTrap, null, this);
+  this.physics.add.overlap(player2, stun, collectTrap, null, this);
+
   cursors = this.input.keyboard.createCursorKeys(); //pros botão funcionar
   keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
   keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -170,9 +191,10 @@ GameScene.create = function() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
-  this.cameras.main.setBounds(0, 0);
+  this.cameras.main.setBounds(0, 0, 2000 * 2, 700 * 2);
 
   this.cameras.main.startFollow(player, true);
+  this.cameras.main.startFollow(player2, true);
   this.cameras.main.setZoom(0.65);
 
   if (this.cameras.main.deadzone) {
@@ -225,7 +247,7 @@ GameScene.create = function() {
 
 GameScene.update = function() {
   //teclas pra andar e tal
-  //powerupstun.anims.play("powerupstun", true);
+  stun.anims.play("stun", true);
 
   if (gameOver) {
     return;
@@ -294,10 +316,16 @@ GameScene.update = function() {
   }
 };
 
-function scoreCount() {
+function collectTrap(player, stun) {
   //  Add and update the score
-  score += 10;
-  scoreText.setText("Score: " + score);
+  stun.disableBody(true, true);
+  score += 10000;
+  scoreText.setText("score: " + score);
+}
+
+function reduzirScore() {
+  score -= 10;
+  scoreText.setText("score: " + score);
 }
 
 function hitSpike(player, spike) {
@@ -308,8 +336,6 @@ function hitSpike(player, spike) {
   player.anims.play("turn");
 
   gameOver = true;
-  if (gameOver === true) {
-    song.stop();
-    this.scene.start(gameover);
-  }
+  song.stop();
+  this.scene.start(gameover);
 }
