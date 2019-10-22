@@ -1,6 +1,8 @@
 import { GameScene } from "/GameScene.js";
 export { gameover };
 
+var gameOver;
+
 var setupSceneInput;
 var gameover = new Phaser.Scene("SceneC");
 
@@ -20,7 +22,7 @@ gameover.create = function() {
     loop: true
   });
 
-  /*if (this.sound.locked) {
+  if (this.sound.locked) {
     this.sound.once(
       "unlocked",
       function(soundManager) {
@@ -37,10 +39,10 @@ setupSceneInput = function(theme) {
   this.input.once(
     "pointerup",
     function() {
+      gameOver = false;
       theme.stop();
       this.scene.start(GameScene);
     },
     this
   );
-  */
 };

@@ -65,10 +65,10 @@ GameScene.create = function() {
 
   //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
   timedEvent = this.time.addEvent({
-    delay: 100,
+    delay: 1,
     callback: reduzirScore,
     callbackScope: this,
-    repeat: 10000
+    repeat: -1
   });
 
   ground = this.physics.add.staticGroup();
@@ -280,7 +280,7 @@ GameScene.update = function() {
     player.anims.play("turn", true);
   }
 
-  if (cursors.up.isDown && player.body.touching.down) {
+  if (cursors.up.isDown && player.body.blocked.down) {
     player.setVelocityY(-800);
     jump.play({
       loop: false
@@ -304,7 +304,7 @@ GameScene.update = function() {
     player2.anims.play("turn2", true);
   }
 
-  if (keyW.isDown && player2.body.touching.down) {
+  if (keyW.isDown && player2.body.blocked.down) {
     player2.setVelocityY(-800);
     jump.play({
       loop: false
@@ -324,7 +324,7 @@ function collectTrap(player, stun) {
 }
 
 function reduzirScore() {
-  score -= 10;
+  score -= 1;
   scoreText.setText("score: " + score);
 }
 
