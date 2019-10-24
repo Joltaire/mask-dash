@@ -14,11 +14,13 @@ var keyS;
 var keyD;
 var song;
 var jump;
+var stun;
 var pointer;
 //var touchX;
 //var touchY;
 var scoreText;
-var score = 500000;
+var score = 50000;
+var timedEvent;
 var graphics;
 var gameOver = false;
 var moveCam = false;
@@ -29,9 +31,7 @@ GameScene.preload = function() {
   this.load.audio("jump", "assets/mjump.mp3");
   this.load.image("background", "assets/background.png"); //plano de fundo
   this.load.image("spike", "assets/spikes_1.png");
-  this.load.image("ground", "assets/ground.png"); //chão principal
-  this.load.image("platform", "assets/platform.png"); //plataformas
-  this.load.image("platformsmall", "assets/platformsmall.png"); //plataformas pequenas
+  this.load.image("tileset", "assets/tileset.png");
   this.load.spritesheet("player", "assets/Bunny.png", {
     frameWidth: 40,
     frameHeight: 96
@@ -48,6 +48,7 @@ GameScene.preload = function() {
     frameWidth: 64,
     frameHeight: 64
   });
+  this.load.tilemapTiledJSON("mapa", "assets/mapa.json");
 };
 
 GameScene.create = function() {
@@ -59,27 +60,32 @@ GameScene.create = function() {
   song.play({
     loop: true
   });
+  this.physics.world.setBounds(0, 0, 4096, 4096);
+
+  //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
+  timedEvent = this.time.addEvent({
+    delay: 1,
+    callback: reduzirScore,
+    callbackScope: this,
+    repeat: -1
+  });
 
   ground = this.physics.add.staticGroup();
   platform = this.physics.add.staticGroup();
   platformsmall = this.physics.add.staticGroup();
   spike = this.physics.add.staticGroup();
 
-  ground.create(600, 1270, "ground"); //chão
-  ground.create(1800, 1270, "ground");
-  platformsmall.create(500, 900, "platformsmall");
-  platform.create(1000, 650, "platform");
-  spike.create(800, 1050, "spike");
+  spike.create(800, 1125, "spike");
 
-  //powerupstun = this.add.sprite(350, 470, "stun");
-  player = this.physics.add.sprite(200, 1000, "player"); //você :)
+  stun = this.physics.add.sprite(500, 840, "stun");
+  player = this.physics.add.sprite(100, 500, "player"); //você :)
 
   player.setBounce(0);
-  player.setCollideWorldBounds(false);
+  player.setCollideWorldBounds(true);
 
-  player2 = this.physics.add.sprite(215, 1000, "player2"); //fren
+  player2 = this.physics.add.sprite(110, 500, "player2"); //fren
   player2.setBounce(0);
-  player2.setCollideWorldBounds(false);
+  player2.setCollideWorldBounds(true);
 
   //animações
   this.anims.create({
@@ -141,17 +147,21 @@ GameScene.create = function() {
     frameRate: 13,
     repeat: -1
   });
-  /*
+
   this.anims.create({
-    key: "powerupstun",
+    key: "stun",
     frames: this.anims.generateFrameNumbers("stun", { start: 0, end: 7 }),
     frameRate: 10,
     repeat: -1
-  });*/
-  scoreText = this.add.text(16, 16, "score: 0", {
-    fontSize: "32px",
-    fill: "#000"
   });
+  scoreText = this.add
+    .text(-175, -150, "score: 50000", {
+      fontSize: "32px",
+      fill: "#000"
+    })
+    .setScrollFactor(0);
+
+  //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
   //colisões: "objeto [x] colide com [x]"
   this.physics.add.collider(player, ground);
   this.physics.add.collider(player, platform);
@@ -163,6 +173,11 @@ GameScene.create = function() {
   this.physics.add.collider(player, spike, hitSpike, null, this);
   this.physics.add.collider(player2, spike, hitSpike, null, this);
 
+  this.physics.add.collider(stun, platform);
+  this.physics.add.collider(stun, platformsmall);
+  this.physics.add.overlap(player, stun, collectTrap, null, this);
+  this.physics.add.overlap(player2, stun, collectTrap, null, this);
+
   cursors = this.input.keyboard.createCursorKeys(); //pros botão funcionar
   keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
   keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -170,10 +185,22 @@ GameScene.create = function() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
-  this.cameras.main.setBounds(0, 0);
+  this.cameras.main.setBounds(0, 0, 4096, 4096);
 
   this.cameras.main.startFollow(player, true);
+  this.cameras.main.startFollow(player2, true);
   this.cameras.main.setZoom(0.65);
+
+  var map = this.add.tilemap("mapa");
+  var terrain = map.addTilesetImage("tileset", "tileset");
+
+  var camadatile = map.createStaticLayer("camadatile", [terrain], 0, 0);
+
+  this.physics.add.collider(player, camadatile);
+  this.physics.add.collider(player2, camadatile);
+  this.physics.add.collider(stun, camadatile);
+
+  camadatile.setCollisionByProperty({ colliders: true });
 
   if (this.cameras.main.deadzone) {
     graphics = this.add.graphics().setScrollFactor(0);
@@ -225,7 +252,7 @@ GameScene.create = function() {
 
 GameScene.update = function() {
   //teclas pra andar e tal
-  //powerupstun.anims.play("powerupstun", true);
+  stun.anims.play("stun", true);
 
   if (gameOver) {
     return;
@@ -258,7 +285,7 @@ GameScene.update = function() {
     player.anims.play("turn", true);
   }
 
-  if (cursors.up.isDown && player.body.touching.down) {
+  if (cursors.up.isDown && player.body.blocked.down) {
     player.setVelocityY(-800);
     jump.play({
       loop: false
@@ -282,7 +309,7 @@ GameScene.update = function() {
     player2.anims.play("turn2", true);
   }
 
-  if (keyW.isDown && player2.body.touching.down) {
+  if (keyW.isDown && player2.body.blocked.down) {
     player2.setVelocityY(-800);
     jump.play({
       loop: false
@@ -294,10 +321,16 @@ GameScene.update = function() {
   }
 };
 
-function scoreCount() {
+function collectTrap(player, stun) {
   //  Add and update the score
-  score += 10;
-  scoreText.setText("Score: " + score);
+  stun.disableBody(true, true);
+  score += 10000;
+  scoreText.setText("score: " + score);
+}
+
+function reduzirScore() {
+  score -= 1;
+  scoreText.setText("score: " + score);
 }
 
 function hitSpike(player, spike) {
@@ -308,8 +341,6 @@ function hitSpike(player, spike) {
   player.anims.play("turn");
 
   gameOver = true;
-  if (gameOver === true) {
-    song.stop();
-    this.scene.start(gameover);
-  }
+  song.stop();
+  this.scene.start(gameover);
 }
