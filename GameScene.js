@@ -31,9 +31,7 @@ GameScene.preload = function() {
   this.load.audio("jump", "assets/mjump.mp3");
   this.load.image("background", "assets/background.png"); //plano de fundo
   this.load.image("spike", "assets/spikes_1.png");
-  this.load.image("ground", "assets/ground.png"); //chão principal
-  this.load.image("platform", "assets/platform.png"); //plataformas
-  this.load.image("platformsmall", "assets/platformsmall.png"); //plataformas pequenas
+  this.load.image("tileset", "assets/tileset.png");
   this.load.spritesheet("player", "assets/Bunny.png", {
     frameWidth: 40,
     frameHeight: 96
@@ -50,6 +48,7 @@ GameScene.preload = function() {
     frameWidth: 64,
     frameHeight: 64
   });
+  this.load.tilemapTiledJSON("mapa", "assets/mapa.json");
 };
 
 GameScene.create = function() {
@@ -61,7 +60,7 @@ GameScene.create = function() {
   song.play({
     loop: true
   });
-  this.physics.world.setBounds(0, 0, 2000 * 2, 575 * 2);
+  this.physics.world.setBounds(0, 0, 4096, 4096);
 
   //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
   timedEvent = this.time.addEvent({
@@ -76,20 +75,15 @@ GameScene.create = function() {
   platformsmall = this.physics.add.staticGroup();
   spike = this.physics.add.staticGroup();
 
-  ground.create(600, 1270, "ground"); //chão
-  ground.create(1800, 1270, "ground");
-  ground.create(3000, 1270, "ground");
-  platformsmall.create(500, 900, "platformsmall");
-  platform.create(1000, 650, "platform");
-  spike.create(800, 1050, "spike");
+  spike.create(800, 1125, "spike");
 
   stun = this.physics.add.sprite(500, 840, "stun");
-  player = this.physics.add.sprite(200, 1000, "player"); //você :)
+  player = this.physics.add.sprite(100, 500, "player"); //você :)
 
   player.setBounce(0);
   player.setCollideWorldBounds(true);
 
-  player2 = this.physics.add.sprite(215, 1000, "player2"); //fren
+  player2 = this.physics.add.sprite(110, 500, "player2"); //fren
   player2.setBounce(0);
   player2.setCollideWorldBounds(true);
 
@@ -191,11 +185,22 @@ GameScene.create = function() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
-  this.cameras.main.setBounds(0, 0, 2000 * 2, 700 * 2);
+  this.cameras.main.setBounds(0, 0, 4096, 4096);
 
   this.cameras.main.startFollow(player, true);
   this.cameras.main.startFollow(player2, true);
   this.cameras.main.setZoom(0.65);
+
+  var map = this.add.tilemap("mapa");
+  var terrain = map.addTilesetImage("tileset", "tileset");
+
+  var camadatile = map.createStaticLayer("camadatile", [terrain], 0, 0);
+
+  this.physics.add.collider(player, camadatile);
+  this.physics.add.collider(player2, camadatile);
+  this.physics.add.collider(stun, camadatile);
+
+  camadatile.setCollisionByProperty({ colliders: true });
 
   if (this.cameras.main.deadzone) {
     graphics = this.add.graphics().setScrollFactor(0);
