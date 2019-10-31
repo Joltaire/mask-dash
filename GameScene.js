@@ -75,7 +75,8 @@ GameScene.create = function() {
   platformsmall = this.physics.add.staticGroup();
   spike = this.physics.add.staticGroup();
 
-  spike.create(800, 1125, "spike");
+  spike.create(2500, 1910, "spike");
+  spike.create(2575, 1910, "spike");
 
   stun = this.physics.add.sprite(500, 840, "stun");
   player = this.physics.add.sprite(100, 500, "player"); //você :)
@@ -185,7 +186,7 @@ GameScene.create = function() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
-  this.cameras.main.setBounds(0, 0, 4096, 4096);
+  this.cameras.main.setBounds(0, 0, 3000, 2096);
 
   this.cameras.main.startFollow(player, true);
   this.cameras.main.startFollow(player2, true);
@@ -291,10 +292,10 @@ GameScene.update = function() {
       loop: false
     });
   }
-
+  /*
   if (cursors.down.isDown) {
     player.setVelocityY(1500);
-  }
+  }*/
   if (keyA.isDown) {
     player2.setVelocityX(-600);
 
@@ -315,10 +316,10 @@ GameScene.update = function() {
       loop: false
     });
   }
-
+  /*
   if (keyS.isDown) {
     player2.setVelocityY(1500);
-  }
+  }*/
 };
 
 function collectTrap(player, stun) {

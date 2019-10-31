@@ -1,4 +1,4 @@
-{
+/*{
   "name": "static",
   "version": "1.0.0",
   "description": "This is a static template with no bundling",
@@ -17,4 +17,29 @@
     "url": "https://github.com/codesandbox-app/static-template/issues"
   },
   "homepage": "https://github.com/codesandbox-app/static-template#readme"
+}*/
+
+{
+  "author": "Ederson Torresini",
+  "bugs": {
+    "url": "https://github.com/joltaire/mask-dash/issues"
+  },
+  "description": "Jogos feitos com Phaser: experimentos e atividades em aula",
+  "homepage": "https://github.com/joltaire/mask-dash#readme",
+  "main": "index.html",
+  "name": "phaser3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joltaire/mask-dash.git"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "0.2.0",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  }
 }
