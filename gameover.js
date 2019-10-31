@@ -1,4 +1,4 @@
-import { GameScene } from "/GameScene.js";
+import { GameScene } from "./GameScene.js";
 export { gameover };
 
 var gameOver;
