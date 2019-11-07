@@ -1,4 +1,4 @@
-import { GameScene } from "/GameScene.js";
+import { GameScene } from "./GameScene.js";
 export { gameover };
 
 var gameOver;
@@ -9,15 +9,15 @@ var gameover = new Phaser.Scene("SceneC");
 gameover.preload = function() {
   this.load.audio("sorrow", ["assets/sorrow.ogg", "assets/sorrow.mp3"]);
 
-  this.load.spritesheet("gameover", "assets/gameover.png", {
-    frameWidth: 1000,
+  this.load.spritesheet("gameover", "assets/loss.png", {
+    frameWidth: 840,
     frameHeight: 600
   });
 };
 gameover.create = function() {
   //console.log("SceneA");
 
-  this.add.image(400, 300, "gameover");
+  this.add.sprite(400, 300, "gameover");
 
   this.anims.create({
     key: "gameover",

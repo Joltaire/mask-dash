@@ -1,4 +1,4 @@
-import { gameover } from "/gameover.js";
+import { gameover } from "./gameover.js";
 export { GameScene };
 
 var player; //personagem
@@ -24,6 +24,8 @@ var timedEvent;
 var graphics;
 var gameOver = false;
 var moveCam = false;
+var velocidade = 600;
+
 var GameScene = new Phaser.Scene("gamescene");
 
 GameScene.preload = function() {
@@ -259,25 +261,12 @@ GameScene.update = function() {
     return;
   }
 
-  // First touch
-  /*if (this.input.pointer1.isDown) {
-    touchX = this.input.pointer1.x;
-    touchY = this.input.pointer1.x;
-    scoreText.setText("X1: " + touchX + " / Y1: " + touchY);
-  }
-  // Second touch
-  if (this.input.pointer2.isDown) {
-    touchX = this.input.pointer2.x;
-    touchY = this.input.pointer2.x;
-    scoreText.setText("X2: " + touchX + " / Y2: " + touchY);
-  }*/
-
   if (cursors.left.isDown) {
-    player.setVelocityX(-600);
+    player.setVelocityX(-velocidade);
 
     player.anims.play("left", true);
   } else if (cursors.right.isDown) {
-    player.setVelocityX(600);
+    player.setVelocityX(velocidade);
 
     player.anims.play("right", true);
   } else {
@@ -287,21 +276,17 @@ GameScene.update = function() {
   }
 
   if (cursors.up.isDown && player.body.blocked.down) {
-    player.setVelocityY(-800);
+    player.setVelocityY(-700);
     jump.play({
       loop: false
     });
   }
-  /*
-  if (cursors.down.isDown) {
-    player.setVelocityY(1500);
-  }*/
   if (keyA.isDown) {
-    player2.setVelocityX(-600);
+    player2.setVelocityX(-velocidade);
 
     player2.anims.play("left2", true);
   } else if (keyD.isDown) {
-    player2.setVelocityX(600);
+    player2.setVelocityX(velocidade);
 
     player2.anims.play("right2", true);
   } else {
@@ -311,7 +296,7 @@ GameScene.update = function() {
   }
 
   if (keyW.isDown && player2.body.blocked.down) {
-    player2.setVelocityY(-800);
+    player2.setVelocityY(-700);
     jump.play({
       loop: false
     });
@@ -332,16 +317,20 @@ function collectTrap(player, stun) {
 function reduzirScore() {
   score -= 1;
   scoreText.setText("score: " + score);
+  if (velocidade < 600) {
+    velocidade += 2;
+  }
 }
 
 function hitSpike(player, spike) {
-  this.physics.pause();
-
-  player.setTint(0xff0000);
+  //this.physics.pause();
 
   player.anims.play("turn");
 
-  gameOver = true;
-  song.stop();
-  this.scene.start(gameover);
+  player.setVelocityY(-600);
+  player.setVelocityX(velocidade);
+  if (velocidade > 100) {
+    velocidade -= 250;
+  }
+  console.log(velocidade);
 }
