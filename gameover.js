@@ -1,4 +1,4 @@
-import { GameScene } from "/GameScene.js";
+import { GameScene } from "./GameScene.js";
 export { gameover };
 
 var gameOver;
@@ -9,15 +9,13 @@ var gameover = new Phaser.Scene("SceneC");
 gameover.preload = function() {
   this.load.audio("sorrow", ["assets/sorrow.ogg", "assets/sorrow.mp3"]);
 
-  this.load.spritesheet("gameover", "assets/gameover.png", {
-    frameWidth: 1000,
-    frameHeight: 600
+  this.load.spritesheet("gameover", "assets/derrotaB.png", {
+    frameWidth: 390,
+    frameHeight: 260
   });
 };
 gameover.create = function() {
   //console.log("SceneA");
-
-  this.add.image(400, 300, "gameover");
 
   this.anims.create({
     key: "gameover",
@@ -29,7 +27,10 @@ gameover.create = function() {
     repeat: -1
   });
 
-  this.add.sprite(400, 300, "gameover").play("gameover");
+  this.add
+    .sprite(400, 300, "gameover")
+    .play("gameover")
+    .setScale(2.5);
 
   var sorrow = this.sound.add("sorrow");
 
@@ -41,16 +42,16 @@ gameover.create = function() {
     this.sound.once(
       "unlocked",
       function(soundManager) {
-        setupSceneInput.call(this, theme);
+        setupSceneInput.call(this, sorrow);
       },
       this
     );
   } else {
-    setupSceneInput.call(this, theme);
+    setupSceneInput.call(this, sorrow);
   }
 };
 
-setupSceneInput = function(theme) {
+setupSceneInput = function(sorrow) {
   this.input.once(
     "pointerup",
     function() {
