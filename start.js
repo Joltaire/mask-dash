@@ -19,13 +19,13 @@ start.create = function() {
     key: "begin",
     frames: this.anims.generateFrameNumbers("start", {
       start: 0,
-      end: 5
+      end: 2
     }),
     frameRate: 10,
     repeat: -1
   });
 
-  this.add.sprite(400, 300, "start").play("begin");
+  this.add.sprite(420, 300, "start").play("begin");
 
   var theme = this.sound.add("theme");
 
