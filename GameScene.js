@@ -8,6 +8,7 @@ var platform; //plataformas
 var platformsmall; //plataformas pequenas
 var cursors;
 var spike;
+var finish;
 var keyW;
 var keyA;
 var keyS;
@@ -34,6 +35,7 @@ GameScene.preload = function() {
   this.load.image("background", "assets/background.png"); //plano de fundo
   this.load.image("spike", "assets/spikes_1.png");
   this.load.image("tileset", "assets/tileset.png");
+  this.load.image("finish", "assets/trophy.png");
   this.load.spritesheet("player", "assets/Bunny.png", {
     frameWidth: 40,
     frameHeight: 96
@@ -47,6 +49,18 @@ GameScene.preload = function() {
     frameHeight: 36
   });
   this.load.spritesheet("fullscreen", "assets/fullscreen.png", {
+    frameWidth: 64,
+    frameHeight: 64
+  });
+  this.load.spritesheet("esquerda", "assets/esquerda.png", {
+    frameWidth: 64,
+    frameHeight: 64
+  });
+  this.load.spritesheet("direita", "assets/direita.png", {
+    frameWidth: 64,
+    frameHeight: 64
+  });
+  this.load.spritesheet("cima", "assets/cima.png", {
     frameWidth: 64,
     frameHeight: 64
   });
@@ -76,9 +90,11 @@ GameScene.create = function() {
   platform = this.physics.add.staticGroup();
   platformsmall = this.physics.add.staticGroup();
   spike = this.physics.add.staticGroup();
+  finish = this.physics.add.staticGroup();
 
   spike.create(2500, 1910, "spike");
   spike.create(2575, 1910, "spike");
+  finish.create(225, 1875, "finish").setScale(0.2);
 
   stun = this.physics.add.sprite(500, 840, "stun");
   player = this.physics.add.sprite(100, 500, "player"); //você :)
@@ -97,7 +113,7 @@ GameScene.create = function() {
       start: 2,
       end: 6
     }),
-    frameRate: 13,
+    frameRate: 16,
     repeat: -1
   });
 
@@ -117,7 +133,7 @@ GameScene.create = function() {
       start: 7,
       end: 11
     }),
-    frameRate: 13,
+    frameRate: 16,
     repeat: -1
   });
 
@@ -127,7 +143,7 @@ GameScene.create = function() {
       start: 2,
       end: 6
     }),
-    frameRate: 13,
+    frameRate: 16,
     repeat: -1
   });
 
@@ -147,7 +163,7 @@ GameScene.create = function() {
       start: 7,
       end: 11
     }),
-    frameRate: 13,
+    frameRate: 16,
     repeat: -1
   });
 
@@ -175,6 +191,8 @@ GameScene.create = function() {
 
   this.physics.add.collider(player, spike, hitSpike, null, this);
   this.physics.add.collider(player2, spike, hitSpike, null, this);
+  this.physics.add.collider(player, finish, hitFinish, null, this);
+  this.physics.add.collider(player2, finish, hitFinish, null, this);
 
   this.physics.add.collider(stun, platform);
   this.physics.add.collider(stun, platformsmall);
@@ -191,7 +209,6 @@ GameScene.create = function() {
   this.cameras.main.setBounds(0, 0, 3000, 2096);
 
   this.cameras.main.startFollow(player, true);
-  this.cameras.main.startFollow(player2, true);
   this.cameras.main.setZoom(0.65);
 
   var map = this.add.tilemap("mapa");
@@ -251,6 +268,55 @@ GameScene.create = function() {
     },
     this
   );
+  // Para a esquerda: correr
+  var esquerda = this.add
+    .image(-100, 700, "esquerda", 0)
+    .setScale(1.75)
+    .setInteractive()
+    .setScrollFactor(0);
+  esquerda.on("pointerover", () => {
+    esquerda.setFrame(1);
+    player.setVelocityX(-velocidade);
+    player.anims.play("left", true);
+  });
+  esquerda.on("pointerout", () => {
+    esquerda.setFrame(0);
+    player.setVelocityX(0);
+    player.anims.play("turn", true);
+  });
+  //
+  // Para a direita: correr
+  var direita = this.add
+    .image(25, 700, "direita", 0)
+    .setScale(1.75)
+    .setInteractive()
+    .setScrollFactor(0);
+  direita.on("pointerover", () => {
+    direita.setFrame(1);
+    player.setVelocityX(velocidade);
+    player.anims.play("right", true);
+  });
+  direita.on("pointerout", () => {
+    direita.setFrame(0);
+    player.setVelocityX(0);
+    player.anims.play("turn", true);
+  });
+  //
+  // Para cima: pular
+  var cima = this.add
+    .image(925, 700, "cima", 0)
+    .setScale(1.75)
+    .setInteractive()
+    .setScrollFactor(0);
+  cima.on("pointerover", () => {
+    cima.setFrame(1);
+    if (player.body.blocked.down) {
+      player.setVelocityY(-700);
+    }
+  });
+  cima.on("pointerout", () => {
+    cima.setFrame(0);
+  });
 };
 
 GameScene.update = function() {
@@ -317,9 +383,32 @@ function collectTrap(player, stun) {
 function reduzirScore() {
   score -= 1;
   scoreText.setText("score: " + score);
+<<<<<<< HEAD
   if (velocidade < 600) {
     velocidade += 2;
   }
+}
+
+function hitSpike(player, spike) {
+  //this.physics.pause();
+=======
+  if (velocidade < 800) {
+    velocidade += 5;
+  }
+}
+
+function hitFinish(player, finish) {
+  //this.physics.pause();
+  this.physics.pause();
+
+  player.anims.play("turn");
+
+  player.setVelocityY(-600);
+  player.setVelocityX(velocidade);
+  if (velocidade > 100) {
+    velocidade -= 250;
+  }
+  console.log(velocidade);
 }
 
 function hitSpike(player, spike) {
@@ -329,8 +418,8 @@ function hitSpike(player, spike) {
 
   player.setVelocityY(-600);
   player.setVelocityX(velocidade);
-  if (velocidade > 100) {
-    velocidade -= 250;
+  if (velocidade > 199) {
+    velocidade -= 200;
   }
   console.log(velocidade);
 }

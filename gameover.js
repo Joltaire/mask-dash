@@ -12,6 +12,9 @@ gameover.preload = function() {
   this.load.spritesheet("gameover", "assets/loss.png", {
     frameWidth: 840,
     frameHeight: 600
+  this.load.spritesheet("gameover", "assets/derrotaB.png", {
+    frameWidth: 390,
+    frameHeight: 260
   });
 };
 gameover.create = function() {
@@ -23,13 +26,16 @@ gameover.create = function() {
     key: "gameover",
     frames: this.anims.generateFrameNumbers("gameover", {
       start: 0,
-      end: 5
+      end: 23
     }),
-    frameRate: 12,
+    frameRate: 14,
     repeat: -1
   });
 
-  this.add.sprite(400, 300, "gameover").play("gameover");
+  this.add
+    .sprite(400, 300, "gameover")
+    .play("gameover")
+    .setScale(2.5);
 
   var sorrow = this.sound.add("sorrow");
 
@@ -41,16 +47,16 @@ gameover.create = function() {
     this.sound.once(
       "unlocked",
       function(soundManager) {
-        setupSceneInput.call(this, theme);
+        setupSceneInput.call(this, sorrow);
       },
       this
     );
   } else {
-    setupSceneInput.call(this, theme);
+    setupSceneInput.call(this, sorrow);
   }
 };
 
-setupSceneInput = function(theme) {
+setupSceneInput = function(sorrow) {
   this.input.once(
     "pointerup",
     function() {
