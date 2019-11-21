@@ -11,8 +11,8 @@ victory.preload = function() {
   this.load.audio("sorrow", ["assets/sorrow.ogg", "assets/sorrow.mp3"]);
 
   this.load.spritesheet("victory", "assets/win.png", {
-    frameWidth: 70,
-    frameHeight: 50
+    frameWidth: 420,
+    frameHeight: 300
   });
 };
 victory.create = function() {
@@ -22,7 +22,7 @@ victory.create = function() {
     key: "victory",
     frames: this.anims.generateFrameNumbers("victory", {
       start: 0,
-      end: 5
+      end: 10
     }),
     frameRate: 10,
     repeat: -1
@@ -30,7 +30,7 @@ victory.create = function() {
 
   this.add
     .sprite(420, 300, "victory")
-    .setScale(12)
+    .setScale(2)
     .play("victory");
 
   var sorrow = this.sound.add("sorrow");
