@@ -383,17 +383,8 @@ function collectTrap(player, stun) {
 function reduzirScore() {
   score -= 1;
   scoreText.setText("score: " + score);
-<<<<<<< HEAD
   if (velocidade < 600) {
     velocidade += 2;
-  }
-}
-
-function hitSpike(player, spike) {
-  //this.physics.pause();
-=======
-  if (velocidade < 800) {
-    velocidade += 5;
   }
 }
 
@@ -403,12 +394,9 @@ function hitFinish(player, finish) {
 
   player.anims.play("turn");
 
-  player.setVelocityY(-600);
-  player.setVelocityX(velocidade);
-  if (velocidade > 100) {
-    velocidade -= 250;
-  }
-  console.log(velocidade);
+  gameOver = true;
+  song.stop();
+  this.scene.start(gameover);
 }
 
 function hitSpike(player, spike) {

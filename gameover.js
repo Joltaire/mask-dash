@@ -9,9 +9,6 @@ var gameover = new Phaser.Scene("SceneC");
 gameover.preload = function() {
   this.load.audio("sorrow", ["assets/sorrow.ogg", "assets/sorrow.mp3"]);
 
-  this.load.spritesheet("gameover", "assets/loss.png", {
-    frameWidth: 840,
-    frameHeight: 600
   this.load.spritesheet("gameover", "assets/derrotaB.png", {
     frameWidth: 390,
     frameHeight: 260
@@ -19,8 +16,6 @@ gameover.preload = function() {
 };
 gameover.create = function() {
   //console.log("SceneA");
-
-  this.add.sprite(400, 300, "gameover");
 
   this.anims.create({
     key: "gameover",
