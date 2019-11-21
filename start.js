@@ -1,4 +1,4 @@
-import { GameScene } from "/GameScene.js";
+import { GameScene } from "./GameScene.js";
 export { start };
 
 var setupSceneInput;
@@ -7,8 +7,8 @@ var start = new Phaser.Scene("SceneA");
 start.preload = function() {
   this.load.audio("theme", ["assets/theme.ogg", "assets/theme.mp3"]);
 
-  this.load.spritesheet("start", "assets/start.png", {
-    frameWidth: 1000,
+  this.load.spritesheet("start", "assets/Intro.png", {
+    frameWidth: 840,
     frameHeight: 600
   });
 };
@@ -19,13 +19,13 @@ start.create = function() {
     key: "begin",
     frames: this.anims.generateFrameNumbers("start", {
       start: 0,
-      end: 5
+      end: 2
     }),
     frameRate: 8,
     repeat: -1
   });
 
-  this.add.sprite(400, 300, "start").play("begin");
+  this.add.sprite(420, 300, "start").play("begin");
 
   var theme = this.sound.add("theme");
 
