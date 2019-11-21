@@ -4,16 +4,18 @@ export { GameScene };
 
 var player; //personagem
 var player2; //personagem secundário
+var player2_x;
+var player2_y;
 var ground; //chão principal
 var platform; //plataformas
 var platformsmall; //plataformas pequenas
 var cursors;
 var spike;
 var finish;
-var keyW;
-var keyA;
-var keyS;
-var keyD;
+//var keyW;
+//var keyA;
+//var keyS;
+//var keyD;
 var song;
 var jump;
 var stun;
@@ -69,6 +71,18 @@ GameScene.preload = function() {
 };
 
 GameScene.create = function() {
+  // Websocket
+  this.socket = io();
+
+  this.socket.on("connect", () => {
+    console.log("Jogador %s conectado ao servidor.", this.socket.id);
+    this.socket.emit("notify", this.socket.id);
+  });
+
+  this.socket.on("publish", msg => {
+    console.log(msg);
+  });
+
   this.add.image(600, 620, "background"); //fundo
   this.add.image(2990, 620, "background");
   song = this.sound.add("song");
@@ -103,9 +117,12 @@ GameScene.create = function() {
   player.setBounce(0);
   player.setCollideWorldBounds(true);
 
-  player2 = this.physics.add.sprite(110, 500, "player2"); //fren
-  player2.setBounce(0);
-  player2.setCollideWorldBounds(true);
+  player2 = this.add.sprite(50, 515, "player2");
+  this.socket.on("renderPlayer", ({ x, y }) => {
+    console.log({ x, y });
+    player2_x = x;
+    player2_y = y;
+  });
 
   //animações
   this.anims.create({
@@ -201,10 +218,10 @@ GameScene.create = function() {
   this.physics.add.overlap(player2, stun, collectTrap, null, this);
 
   cursors = this.input.keyboard.createCursorKeys(); //pros botão funcionar
-  keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-  keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-  keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-  keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+  //keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+  //keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+  //keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+  //keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
   this.cameras.main.setBounds(0, 0, 3000, 2096);
@@ -321,33 +338,38 @@ GameScene.create = function() {
 };
 
 GameScene.update = function() {
-  //teclas pra andar e tal
-  stun.anims.play("stun", true);
+  this.socket.emit("movement", { x: player.body.x, y: player.body.y });
+  player2.x = player2_x;
+  player2.y = player2_y;
+};
 
-  if (gameOver) {
-    return;
-  }
+//teclas pra andar e tal
+stun.anims.play("stun", true);
 
-  if (cursors.left.isDown) {
-    player.setVelocityX(-velocidade);
+if (gameOver) {
+  return;
+}
 
-    player.anims.play("left", true);
-  } else if (cursors.right.isDown) {
-    player.setVelocityX(velocidade);
+if (cursors.left.isDown) {
+  player.setVelocityX(-velocidade);
 
-    player.anims.play("right", true);
-  } else {
-    player.setVelocityX(0);
+  player.anims.play("left", true);
+} else if (cursors.right.isDown) {
+  player.setVelocityX(velocidade);
 
-    player.anims.play("turn", true);
-  }
+  player.anims.play("right", true);
+} else if (cursors.right.isUp) {
+  player.setVelocityX(0);
+  player.anims.play("turn", true);
+}
 
-  if (cursors.up.isDown && player.body.blocked.down) {
-    player.setVelocityY(-700);
-    jump.play({
-      loop: false
-    });
-  }
+if (cursors.up.isDown && player.body.blocked.down) {
+  player.setVelocityY(-700);
+  jump.play({
+    loop: false
+  });
+}
+/*
   if (keyA.isDown) {
     player2.setVelocityX(-velocidade);
 
@@ -367,12 +389,11 @@ GameScene.update = function() {
     jump.play({
       loop: false
     });
-  }
-  /*
+  }*/
+/*
   if (keyS.isDown) {
     player2.setVelocityY(1500);
   }*/
-};
 
 function collectTrap(player, stun) {
   //  Add and update the score
