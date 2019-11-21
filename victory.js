@@ -10,7 +10,7 @@ var victory = new Phaser.Scene("SceneD");
 victory.preload = function() {
   this.load.audio("sorrow", ["assets/sorrow.ogg", "assets/sorrow.mp3"]);
 
-  this.load.spritesheet("victory", "assets/win.png", {
+  this.load.spritesheet("victory", "assets/victory.png", {
     frameWidth: 420,
     frameHeight: 300
   });
