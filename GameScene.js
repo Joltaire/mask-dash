@@ -1,4 +1,5 @@
 import { gameover } from "./gameover.js";
+import { victory } from "./victory.js";
 export { GameScene };
 
 var player; //personagem
@@ -396,7 +397,7 @@ function hitFinish(player, finish) {
 
   gameOver = true;
   song.stop();
-  this.scene.start(gameover);
+  this.scene.start(victory);
 }
 
 function hitSpike(player, spike) {
