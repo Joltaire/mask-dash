@@ -2,7 +2,8 @@ import { GameScene } from "./GameScene.js";
 export { victory };
 
 var victory;
-
+var theme;
+var gameover;
 var setupSceneInput;
 var victory = new Phaser.Scene("SceneD");
 
