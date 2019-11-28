@@ -9,7 +9,7 @@ var config = {
     default: "arcade",
     arcade: {
       gravity: { y: 1100 },
-      debug: true
+      debug: false
     }
   },
   // Suporte a tela cheia
@@ -17,7 +17,7 @@ var config = {
     mode: Phaser.Scale.FIT,
     parent: "game",
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 840,
+    width: 960,
     height: 600
   },
   // Várias cenas, em sequência

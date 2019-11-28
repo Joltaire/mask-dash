@@ -25,7 +25,10 @@ start.create = function() {
     repeat: -1
   });
 
-  this.add.sprite(420, 300, "start").play("begin");
+  this.add
+    .sprite(480, 300, "start")
+    .play("begin")
+    .setScale(1.2);
 
   var theme = this.sound.add("theme");
 

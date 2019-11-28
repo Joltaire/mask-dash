@@ -28,7 +28,7 @@ gameover.create = function() {
   });
 
   this.add
-    .sprite(400, 300, "gameover")
+    .sprite(480, 300, "gameover")
     .play("gameover")
     .setScale(2.5);
 
