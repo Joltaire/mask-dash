@@ -21,14 +21,14 @@ start.create = function() {
       start: 0,
       end: 2
     }),
-    frameRate: 10,
+    frameRate: 8,
     repeat: -1
   });
 
   this.add
-    .sprite(480, 300, "start")
+    .sprite(640, 360, "start")
     .play("begin")
-    .setScale(1.2);
+    .setScale(1.55);
 
   var theme = this.sound.add("theme");
 

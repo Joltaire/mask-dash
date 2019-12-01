@@ -4,21 +4,18 @@ export { GameScene };
 
 var player; //personagem
 var player2; //personagem secundário
-var player2_x;
-var player2_y;
 var ground; //chão principal
 var platform; //plataformas
 var platformsmall; //plataformas pequenas
 var cursors;
 var spike;
 var finish;
-//var keyW;
-//var keyA;
-//var keyS;
-//var keyD;
+var keyW;
+var keyA;
+var keyS;
+var keyD;
 var song;
 var jump;
-var stun;
 var pointer;
 //var touchX;
 //var touchY;
@@ -29,7 +26,6 @@ var graphics;
 var gameOver = false;
 var moveCam = false;
 var velocidade = 600;
-var velocidadeY = 700;
 
 var GameScene = new Phaser.Scene("gamescene");
 
@@ -49,14 +45,11 @@ GameScene.preload = function() {
     frameWidth: 40,
     frameHeight: 96
   });
-  this.load.spritesheet("finish", "assets/muse.png", {
+  this.load.spritesheet("finish", "assets/museB.png", {
     frameWidth: 166,
     frameHeight: 210
   });
-  this.load.spritesheet("stun", "assets/Stun.png", {
-    frameWidth: 34,
-    frameHeight: 36
-  });
+
   this.load.spritesheet("fullscreen", "assets/fullscreen.png", {
     frameWidth: 64,
     frameHeight: 64
@@ -77,36 +70,12 @@ GameScene.preload = function() {
 };
 
 GameScene.create = function() {
-  // Websocket
-  this.socket = io();
-
-  this.socket.on("connect", () => {
-    console.log("Jogador %s conectado ao servidor.", this.socket.id);
-    this.socket.emit("notify", this.socket.id);
-  });
-
-  this.socket.on("publish", msg => {
-    console.log(msg);
-  });
-
-  this.add.image(600, 620, "background"); //fundo
-  this.add.image(2990, 620, "background");
   song = this.sound.add("song");
   jump = this.sound.add("jump");
 
   song.play({
     loop: true
   });
-
-  var orientation = GameScene.scale.orientation;
-  GameScene.scale.on("orientationchange", function(orientation) {
-    if (orientation === Phaser.Scale.PORTRAIT) {
-      // ...
-    } else if (orientation === Phaser.Scale.LANDSCAPE) {
-      // ...
-    }
-  });
-
   this.physics.world.setBounds(0, 0, 27000, 3000);
 
   //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
@@ -122,7 +91,7 @@ GameScene.create = function() {
   var terrain2 = map.addTilesetImage("decor", "decor");
   var terrain3 = map.addTilesetImage("caverna", "caverna");
 
-  //var camadatile4 = map.createStaticLayer("sky", [terrain3], 0, -25);
+  var camadatile4 = map.createStaticLayer("sky", [terrain3], 0, -25);
   var camadatile3 = map.createStaticLayer("caverna", [terrain3], -2, -90);
   var camadatile = map.createStaticLayer("mapa", [terrain], 0, 0);
   var camadatile2 = map.createStaticLayer("decor", [terrain2], 0, -34);
@@ -135,20 +104,16 @@ GameScene.create = function() {
 
   spike.create(2500, 1910, "spike");
   spike.create(2575, 1910, "spike");
+  finish = this.physics.add.sprite(1100, 505, "finish").setScale(1.2);
 
-  finish = this.physics.add.sprite(1200, 500, "finish").setScale(1.2);
-  stun = this.physics.add.sprite(500, 840, "stun");
   player = this.physics.add.sprite(500, 700, "player"); //você :)
 
   player.setBounce(0);
   player.setCollideWorldBounds(true);
 
-  player2 = this.add.sprite(50, 515, "player2");
-  this.socket.on("renderPlayer", ({ x, y }) => {
-    console.log({ x, y });
-    player2_x = x;
-    player2_y = y;
-  });
+  player2 = this.physics.add.sprite(500, 515, "player2"); //fren
+  player2.setBounce(0);
+  player2.setCollideWorldBounds(true);
 
   //animações
   this.anims.create({
@@ -212,13 +177,6 @@ GameScene.create = function() {
   });
 
   this.anims.create({
-    key: "stun",
-    frames: this.anims.generateFrameNumbers("stun", { start: 0, end: 7 }),
-    frameRate: 10,
-    repeat: -1
-  });
-
-  this.anims.create({
     key: "finish",
     frames: this.anims.generateFrameNumbers("finish", { start: 0, end: 11 }),
     frameRate: 10,
@@ -246,16 +204,11 @@ GameScene.create = function() {
   this.physics.add.collider(player, finish, hitFinish, null, this);
   this.physics.add.collider(player2, finish, hitFinish, null, this);
 
-  this.physics.add.collider(stun, platform);
-  this.physics.add.collider(stun, platformsmall);
-  this.physics.add.overlap(player, stun, collectTrap, null, this);
-  this.physics.add.overlap(player2, stun, collectTrap, null, this);
-
   cursors = this.input.keyboard.createCursorKeys(); //pros botão funcionar
-  //keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-  //keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-  //keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-  //keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+  keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+  keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+  keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+  keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
   this.cameras.main.setBounds(0, 0, 27000, 3000);
@@ -265,7 +218,6 @@ GameScene.create = function() {
 
   this.physics.add.collider(player, camadatile);
   this.physics.add.collider(player2, camadatile);
-  this.physics.add.collider(stun, camadatile);
   this.physics.add.collider(finish, camadatile);
 
   camadatile.setCollisionByProperty({ colliders: true });
@@ -316,70 +268,15 @@ GameScene.create = function() {
     },
     this
   );
-  // Para a esquerda: correr
-  var esquerda = this.add
-    .image(-120, 670, "esquerda", 0)
-    .setScale(1.5)
-    .setInteractive()
-    .setScrollFactor(0);
-  esquerda.on("pointerover", () => {
-    esquerda.setFrame(1);
-    player.setVelocityX(-velocidade);
-    player.anims.play("left", true);
-  });
-  esquerda.on("pointerout", () => {
-    esquerda.setFrame(0);
-    player.setVelocityX(0);
-    player.anims.play("turn", true);
-  });
-  //
-  // Para a direita: correr
-  var direita = this.add
-    .image(75, 670, "direita", 0)
-    .setScale(1.5)
-    .setInteractive()
-    .setScrollFactor(0);
-  direita.on("pointerover", () => {
-    direita.setFrame(1);
-    player.setVelocityX(velocidade);
-    player.anims.play("right", true);
-  });
-  direita.on("pointerout", () => {
-    direita.setFrame(0);
-    player.setVelocityX(0);
-    player.anims.play("turn", true);
-  });
-  //
-  // Para cima: pular
-  var cima = this.add
-    .image(950, 670, "cima", 0)
-    .setScale(1.5)
-    .setInteractive()
-    .setScrollFactor(0);
-  cima.on("pointerover", () => {
-    cima.setFrame(1);
-    if (player.body.blocked.down) {
-      player.setVelocityY(-velocidadeY);
-    }
-  });
-  cima.on("pointerout", () => {
-    cima.setFrame(0);
-  });
 };
 
 GameScene.update = function() {
-  this.socket.emit("movement", { x: player.body.x, y: player.body.y });
-  player2.x = player2_x;
-  player2.y = player2_y;
-
   //teclas pra andar e tal
-  stun.anims.play("stun", true);
   finish.anims.play("finish", true);
-
   if (gameOver) {
     return;
   }
-  /*
+
   if (cursors.left.isDown) {
     player.setVelocityX(-velocidade);
 
@@ -388,8 +285,9 @@ GameScene.update = function() {
     player.setVelocityX(velocidade);
 
     player.anims.play("right", true);
-  } else if (cursors.right.isUp) {
+  } else {
     player.setVelocityX(0);
+
     player.anims.play("turn", true);
   }
 
@@ -398,8 +296,7 @@ GameScene.update = function() {
     jump.play({
       loop: false
     });
-  } */
-  /*
+  }
   if (keyA.isDown) {
     player2.setVelocityX(-velocidade);
 
@@ -419,28 +316,14 @@ GameScene.update = function() {
     jump.play({
       loop: false
     });
-  }*/
-  /*
-  if (keyS.isDown) {
-    player2.setVelocityY(1500);
-  }*/
+  }
 };
-
-function collectTrap(player, stun) {
-  //  Add and update the score
-  stun.disableBody(true, true);
-  score += 10000;
-  scoreText.setText("score: " + score);
-}
 
 function reduzirScore() {
   score -= 1;
   scoreText.setText("score: " + score);
-  if (velocidade < 600) {
-    velocidade += 2;
-  }
-  if (700 < velocidadeY > 100) {
-    velocidadeY -= 2;
+  if (velocidade < 800) {
+    velocidade += 5;
   }
 }
 
@@ -461,6 +344,7 @@ function hitSpike(player, spike) {
   player.anims.play("turn");
 
   player.setVelocityY(-600);
+  player.setVelocityX(velocidade);
   if (velocidade > 199) {
     velocidade -= 200;
   }

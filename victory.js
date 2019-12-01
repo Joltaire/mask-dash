@@ -2,17 +2,16 @@ import { GameScene } from "./GameScene.js";
 export { victory };
 
 var victory;
-var theme;
-var gameover;
+
 var setupSceneInput;
 var victory = new Phaser.Scene("SceneD");
 
 victory.preload = function() {
   this.load.audio("sorrow", ["assets/sorrow.ogg", "assets/sorrow.mp3"]);
 
-  this.load.spritesheet("victory", "assets/victory.png", {
-    frameWidth: 420,
-    frameHeight: 300
+  this.load.spritesheet("victory", "assets/win.png", {
+    frameWidth: 70,
+    frameHeight: 50
   });
 };
 victory.create = function() {
@@ -22,7 +21,7 @@ victory.create = function() {
     key: "victory",
     frames: this.anims.generateFrameNumbers("victory", {
       start: 0,
-      end: 10
+      end: 5
     }),
     frameRate: 10,
     repeat: -1
@@ -30,7 +29,7 @@ victory.create = function() {
 
   this.add
     .sprite(420, 300, "victory")
-    .setScale(2)
+    .setScale(12)
     .play("victory");
 
   var sorrow = this.sound.add("sorrow");
