@@ -28,9 +28,9 @@ gameover.create = function() {
   });
 
   this.add
-    .sprite(400, 300, "gameover")
+    .sprite(640, 360, "gameover")
     .play("gameover")
-    .setScale(2.5);
+    .setScale(3.33);
 
   var sorrow = this.sound.add("sorrow");
 
