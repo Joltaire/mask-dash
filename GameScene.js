@@ -66,7 +66,7 @@ GameScene.preload = function() {
     frameWidth: 120,
     frameHeight: 120
   });
-  this.load.tilemapTiledJSON("mapadois", "assets/mapadois.json");
+  this.load.tilemapTiledJSON("mapadois", "assets/mapanovo.json");
 };
 
 GameScene.create = function() {
