@@ -37,6 +37,10 @@ GameScene.preload = function() {
   this.load.image("tileset", "assets/tileset.png");
   this.load.image("caverna", "assets/caverna.png");
   this.load.image("decor", "assets/decor.png");
+  this.load.image("darkbush", "assets/darkbush.png");
+  this.load.image("bush", "assets/bush.png");
+  this.load.image("bat", "assets/bat.png");
+  this.load.image("tree", "assets/tree.png");
   this.load.spritesheet("player", "assets/Bunny.png", {
     frameWidth: 40,
     frameHeight: 96
@@ -66,7 +70,7 @@ GameScene.preload = function() {
     frameWidth: 120,
     frameHeight: 120
   });
-  this.load.tilemapTiledJSON("mapadois", "assets/mapanovo.json");
+  this.load.tilemapTiledJSON("mapadois", "assets/mapamk3.json");
 };
 
 GameScene.create = function() {
@@ -76,6 +80,17 @@ GameScene.create = function() {
   song.play({
     loop: true
   });
+
+  this.anims.create({
+    key: "bat",
+    frames: this.anims.generateFrameNumbers("bat", {
+      start: 0,
+      end: 35
+    }),
+    frameRate: 14,
+    repeat: -1
+  });
+
   this.physics.world.setBounds(0, 0, 27000, 3000);
 
   //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
@@ -90,15 +105,20 @@ GameScene.create = function() {
   var terrain = map.addTilesetImage("tileset", "tileset");
   var terrain2 = map.addTilesetImage("decor", "decor");
   var terrain3 = map.addTilesetImage("caverna", "caverna");
+  var terrain4 = map.addTilesetImage("darkbush", "darkbush");
+  var terrain5 = map.addTilesetImage("bush", "bush");
+  var terrain6 = map.addTilesetImage("tree", "tree");
+  var terrain7 = map.addTilesetImage("bat", "bat");
 
   var camadatile4 = map.createStaticLayer("sky", [terrain3], 0, -25);
   var camadatile3 = map.createStaticLayer("caverna", [terrain3], -2, -90);
-  var camadatile = map.createStaticLayer("mapa", [terrain], 0, 0);
+  var camadatile5 = map.createStaticLayer("darkbush", [terrain4], 0, -70);
+  var camadatile6 = map.createStaticLayer("tree", [terrain6], 0, -275);
+  var camadatile7 = map.createStaticLayer("bush", [terrain5], 0, -50);
   var camadatile2 = map.createStaticLayer("decor", [terrain2], 0, -34);
+  var camadatile = map.createStaticLayer("mapa", [terrain], 0, 0);
+  var camadatile8 = map.createStaticLayer("bat", [terrain7], 350, -100);
 
-  ground = this.physics.add.staticGroup();
-  platform = this.physics.add.staticGroup();
-  platformsmall = this.physics.add.staticGroup();
   spike = this.physics.add.staticGroup();
   finish = this.physics.add.staticGroup();
 
