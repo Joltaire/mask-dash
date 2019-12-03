@@ -9,9 +9,9 @@ var victory = new Phaser.Scene("SceneD");
 victory.preload = function() {
   this.load.audio("sorrow", ["assets/sorrow.ogg", "assets/sorrow.mp3"]);
 
-  this.load.spritesheet("victory", "assets/win.png", {
-    frameWidth: 70,
-    frameHeight: 50
+  this.load.spritesheet("victory", "assets/victory.png", {
+    frameWidth: 420,
+    frameHeight: 350
   });
 };
 victory.create = function() {
@@ -28,8 +28,8 @@ victory.create = function() {
   });
 
   this.add
-    .sprite(420, 300, "victory")
-    .setScale(12)
+    .sprite(460, 390, "victory")
+    .setScale(2.25)
     .play("victory");
 
   var sorrow = this.sound.add("sorrow");

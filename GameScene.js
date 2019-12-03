@@ -1,4 +1,4 @@
-import { gameover } from "./gameover.js";
+//import { gameover } from "./gameover.js";
 import { victory } from "./victory.js";
 export { GameScene };
 
@@ -12,7 +12,6 @@ var spike;
 var finish;
 var keyW;
 var keyA;
-var keyS;
 var keyD;
 var song;
 var jump;
@@ -24,7 +23,7 @@ var score = 50000;
 var timedEvent;
 var graphics;
 var gameOver = false;
-var moveCam = false;
+var moveCam = true;
 var velocidade = 600;
 
 var GameScene = new Phaser.Scene("gamescene");
@@ -39,7 +38,7 @@ GameScene.preload = function() {
   this.load.image("decor", "assets/decor.png");
   this.load.image("darkbush", "assets/darkbush.png");
   this.load.image("bush", "assets/bush.png");
-  this.load.image("bat", "assets/bat.png");
+ // this.load.image("bat", "assets/bat.png");
   this.load.image("tree", "assets/tree.png");
   this.load.spritesheet("player", "assets/Bunny.png", {
     frameWidth: 40,
@@ -81,21 +80,11 @@ GameScene.create = function() {
     loop: true
   });
 
-  this.anims.create({
-    key: "bat",
-    frames: this.anims.generateFrameNumbers("bat", {
-      start: 0,
-      end: 35
-    }),
-    frameRate: 14,
-    repeat: -1
-  });
-
   this.physics.world.setBounds(0, 0, 27000, 3000);
 
   //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
   timedEvent = this.time.addEvent({
-    delay: 1,
+    delay: 100,
     callback: reduzirScore,
     callbackScope: this,
     repeat: -1
@@ -108,7 +97,7 @@ GameScene.create = function() {
   var terrain4 = map.addTilesetImage("darkbush", "darkbush");
   var terrain5 = map.addTilesetImage("bush", "bush");
   var terrain6 = map.addTilesetImage("tree", "tree");
-  var terrain7 = map.addTilesetImage("bat", "bat");
+  //var terrain7 = map.addTilesetImage("bat", "bat");
 
   var camadatile4 = map.createStaticLayer("sky", [terrain3], 0, -25);
   var camadatile3 = map.createStaticLayer("caverna", [terrain3], -2, -90);
@@ -117,7 +106,7 @@ GameScene.create = function() {
   var camadatile7 = map.createStaticLayer("bush", [terrain5], 0, -50);
   var camadatile2 = map.createStaticLayer("decor", [terrain2], 0, -34);
   var camadatile = map.createStaticLayer("mapa", [terrain], 0, 0);
-  var camadatile8 = map.createStaticLayer("bat", [terrain7], 350, -100);
+  //var camadatile8 = map.createStaticLayer("bat", [terrain7], 350, -100);
 
   spike = this.physics.add.staticGroup();
   finish = this.physics.add.staticGroup();
@@ -126,12 +115,12 @@ GameScene.create = function() {
   spike.create(2575, 1910, "spike");
   finish = this.physics.add.sprite(1100, 505, "finish").setScale(1.2);
 
-  player = this.physics.add.sprite(500, 700, "player"); //você :)
+  player = this.physics.add.sprite(500, 715, "player"); //você :)
 
   player.setBounce(0);
   player.setCollideWorldBounds(true);
 
-  player2 = this.physics.add.sprite(500, 515, "player2"); //fren
+  player2 = this.physics.add.sprite(500, 715, "player2"); //fren
   player2.setBounce(0);
   player2.setCollideWorldBounds(true);
 
@@ -227,14 +216,14 @@ GameScene.create = function() {
   cursors = this.input.keyboard.createCursorKeys(); //pros botão funcionar
   keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
   keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-  keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
-  this.cameras.main.setBounds(0, 0, 27000, 3000);
+  this.cameras.main.setBounds(0, 0, 27000, 3000).setSize(920, 390);
 
-  this.cameras.main.startFollow(player, true);
-  this.cameras.main.setZoom(0.65);
+  this.cameras.main.startFollow(player, true, 0.5, 0.5);
+  this.cameras.add(0, 390, 920, 390).startFollow(player2, true, 0.5, 0.5).setBounds(0, 0, 27000, 3000);
+
 
   this.physics.add.collider(player, camadatile);
   this.physics.add.collider(player2, camadatile);
@@ -340,7 +329,7 @@ GameScene.update = function() {
 };
 
 function reduzirScore() {
-  score -= 1;
+  score -= 10;
   scoreText.setText("score: " + score);
   if (velocidade < 800) {
     velocidade += 5;
@@ -355,7 +344,7 @@ function hitFinish(player, finish) {
 
   gameOver = true;
   song.stop();
-  this.scene.start(gameover);
+  this.scene.start(victory);
 }
 
 function hitSpike(player, spike) {
