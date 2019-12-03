@@ -1,6 +1,6 @@
 import { GameScene } from "./GameScene.js";
 import { start } from "./start.js";
-import { gameover } from "./gameover.js";
+//import { gameover } from "./gameover.js";
 import { victory } from "./victory.js";
 
 var config = {
@@ -9,7 +9,7 @@ var config = {
     default: "arcade",
     arcade: {
       gravity: { y: 1100 },
-      debug: true
+      debug: false
     }
   },
   // Suporte a tela cheia
@@ -17,11 +17,12 @@ var config = {
     mode: Phaser.Scale.FIT,
     parent: "game",
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 1280,
-    height: 720
+    width: 920,
+    height: 780
   },
+
   // Várias cenas, em sequência
-  scene: [start, GameScene, gameover, victory]
+  scene: [start, GameScene, victory]
 };
 
 var game = new Phaser.Game(config);

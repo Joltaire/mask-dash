@@ -5,7 +5,7 @@ var setupSceneInput;
 var start = new Phaser.Scene("SceneA");
 
 start.preload = function() {
-  this.load.audio("theme", ["assets/theme.ogg", "assets/theme.mp3"]);
+  this.load.audio("theme", ["assets/theme.ogg"]);
 
   this.load.spritesheet("start", "assets/Intro.png", {
     frameWidth: 840,
@@ -26,9 +26,9 @@ start.create = function() {
   });
 
   this.add
-    .sprite(640, 360, "start")
+    .sprite(460, 390, "start")
     .play("begin")
-    .setScale(1.55);
+    .setScale(1.3);
 
   var theme = this.sound.add("theme");
 
