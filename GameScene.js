@@ -12,7 +12,6 @@ var spike;
 var finish;
 var keyW;
 var keyA;
-var keyS;
 var keyD;
 var song;
 var jump;
@@ -217,7 +216,6 @@ GameScene.create = function() {
   cursors = this.input.keyboard.createCursorKeys(); //pros botão funcionar
   keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
   keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-  keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
