@@ -17,8 +17,8 @@ var config = {
     mode: Phaser.Scale.FIT,
     parent: "game",
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 920,
-    height: 780
+    width: 720,
+    height: 480
   },
 
   // Várias cenas, em sequência
