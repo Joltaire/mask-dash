@@ -1,5 +1,5 @@
 import { GameScene } from "./GameScene.js";
-export { gameover };
+//export { gameover };
 
 var gameOver;
 
@@ -28,9 +28,9 @@ gameover.create = function() {
   });
 
   this.add
-    .sprite(640, 360, "gameover")
+    .sprite(460, 390, "gameover")
     .play("gameover")
-    .setScale(3.33);
+    .setScale(3);
 
   var sorrow = this.sound.add("sorrow");
 
