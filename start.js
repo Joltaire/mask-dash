@@ -26,9 +26,8 @@ start.create = function() {
   });
 
   this.add
-    .sprite(460, 390, "start")
-    .play("begin")
-    .setScale(1.3);
+    .sprite(360, 240, "start")
+    .play("begin");
 
   var theme = this.sound.add("theme");
 

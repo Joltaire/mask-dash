@@ -219,10 +219,10 @@ GameScene.create = function() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
-  this.cameras.main.setBounds(0, 0, 27000, 3000).setSize(920, 390).setZoom(0.75);
+  this.cameras.main.setBounds(0, 0, 27000, 3000).setSize(720, 240).setZoom(0.5);
 
   this.cameras.main.startFollow(player, true, 0.5, 0.5);
-  this.cameras.add(0, 390, 920, 390).startFollow(player2, true, 0.5, 0.5).setBounds(0, 0, 27000, 3000).setZoom(0.75);
+  this.cameras.add(0, 240, 720, 240).startFollow(player2, true, 0.5, 0.5).setBounds(0, 0, 27000, 3000).setZoom(0.5);
 
 
   this.physics.add.collider(player, camadatile);
