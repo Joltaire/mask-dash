@@ -23,7 +23,7 @@ victory.create = function() {
       start: 0,
       end: 5
     }),
-    frameRate: 10,
+    frameRate: 7,
     repeat: -1
   });
 
