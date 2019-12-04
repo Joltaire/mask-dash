@@ -109,11 +109,11 @@ GameScene.create = function() {
   //var camadatile8 = map.createStaticLayer("bat", [terrain7], 350, -100);
 
   spike = this.physics.add.staticGroup();
-  finish = this.physics.add.staticGroup();
+  //finish = this.physics.add.staticGroup();
 
-  spike.create(2500, 1910, "spike");
-  spike.create(2575, 1910, "spike");
-  finish = this.physics.add.sprite(1100, 505, "finish").setScale(1.2);
+  //spike.create(2500, 1910, "spike");
+  //spike.create(2575, 1910, "spike");
+  finish = this.physics.add.sprite(22840, 450, "finish").setScale(1.2);
 
   player = this.physics.add.sprite(500, 715, "player"); //você :)
 
@@ -219,10 +219,10 @@ GameScene.create = function() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
-  this.cameras.main.setBounds(0, 0, 27000, 3000).setSize(920, 390);
+  this.cameras.main.setBounds(0, 0, 27000, 3000).setSize(920, 390).setZoom(0.75);
 
   this.cameras.main.startFollow(player, true, 0.5, 0.5);
-  this.cameras.add(0, 390, 920, 390).startFollow(player2, true, 0.5, 0.5).setBounds(0, 0, 27000, 3000);
+  this.cameras.add(0, 390, 920, 390).startFollow(player2, true, 0.5, 0.5).setBounds(0, 0, 27000, 3000).setZoom(0.75);
 
 
   this.physics.add.collider(player, camadatile);
@@ -330,10 +330,10 @@ GameScene.update = function() {
 
 function reduzirScore() {
   score -= 10;
-  scoreText.setText("score: " + score);
+  scoreText.setText("score: " + score); /*
   if (velocidade < 800) {
     velocidade += 5;
-  }
+  } */
 }
 
 function hitFinish(player, finish) {
