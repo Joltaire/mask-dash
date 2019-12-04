@@ -7,7 +7,7 @@ var start = new Phaser.Scene("SceneA");
 start.preload = function() {
   this.load.audio("theme", ["assets/theme.ogg"]);
 
-  this.load.spritesheet("start", "assets/Intro.png", {
+  this.load.spritesheet("start", "assets/begin.png", {
     frameWidth: 840,
     frameHeight: 600
   });
