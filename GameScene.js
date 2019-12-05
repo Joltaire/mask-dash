@@ -1,4 +1,3 @@
-
 //import { gameover } from "./gameover.js";
 import { victory } from "./victory.js";
 export { GameScene };
@@ -114,7 +113,7 @@ GameScene.preload = function() {
     frameWidth: 120,
     frameHeight: 120
   });
-  this.load.tilemapTiledJSON("mapadois", "assets/mapamk3.json");
+  this.load.tilemapTiledJSON("mapadois", "assets/mapadois.json");
 };
 
 GameScene.create = function() {
@@ -155,34 +154,34 @@ GameScene.create = function() {
   spike = this.physics.add.staticGroup();
   //finish = this.physics.add.staticGroup();
 
-  spike.create(475, 600, "spike");
-  spike.create(550, 600, "spike");
-  spike.create(475, 600, "spike");
-  spike.create(550, 600, "spike");
-  spike.create(475, 600, "spike");
-  spike.create(550, 600, "spike");
-  spike.create(475, 600, "spike");
-  spike.create(550, 600, "spike");
-  spike.create(475, 600, "spike");
-  spike.create(550, 600, "spike");
-  bat1 = this.add.sprite(800, 715, "bat1");
-  bat2 = this.add.sprite(800, 800, "bat1");
-  bat3 = this.add.sprite(800, 885, "bat1");
-  battwo1 = this.add.sprite(1000, 715, "bat2");
-  battwo2 = this.add.sprite(1000, 800, "bat2");
-  battwo3 = this.add.sprite(1000, 885, "bat2");
-  yellowbutt1 = this.add.sprite(400, 700, "yellowbutt").setScale(1.5);
-  yellowbutt2 = this.add.sprite(400, 650, "yellowbutt").setScale(1.5);
-  yellowbutt3 = this.add.sprite(400, 600, "yellowbutt").setScale(1.5);
-  bluebutt1 = this.add.sprite(350, 700, "bluebutt").setScale(1.5);
-  bluebutt2 = this.add.sprite(350, 650, "bluebutt").setScale(1.5);
-  bluebutt3 = this.add.sprite(350, 600, "bluebutt").setScale(1.5);
-  orangebutt1 = this.add.sprite(300, 700, "orangebutt").setScale(1.5);
-  orangebutt2 = this.add.sprite(300, 650, "orangebutt").setScale(1.5);
-  orangebutt3 = this.add.sprite(300, 600, "orangebutt").setScale(1.5);
-  pinkbutt1 = this.add.sprite(250, 700, "pinkbutt").setScale(1.5);
-  pinkbutt2 = this.add.sprite(250, 650, "pinkbutt").setScale(1.5);
-  pinkbutt3 = this.add.sprite(250, 600, "pinkbutt").setScale(1.5);
+  spike.create(2670, 1605, "spike");
+  spike.create(4500, 2745, "spike");
+  spike.create(6810, 1455, "spike");
+  spike.create(12390, 525, "spike");
+  spike.create(23640, 855, "spike");
+  spike.create(24420, 855, "spike");
+  spike.create(25200, 855, "spike");
+  spike.create(25980, 855, "spike");
+  spike.create(20670, 2235, "spike");
+  spike.create(15570, 1425, "spike");
+  bat1 = this.add.sprite(4810, 2310, "bat1");
+  bat2 = this.add.sprite(10590, 2400, "bat1");
+  bat3 = this.add.sprite(12780, 2250, "bat1");
+  battwo1 = this.add.sprite(4560, 2400, "bat2");
+  battwo2 = this.add.sprite(11190, 2430, "bat2");
+  battwo3 = this.add.sprite(12060, 2370, "bat2");
+  yellowbutt1 = this.add.sprite(630, 810, "yellowbutt").setScale(1.5);
+  yellowbutt2 = this.add.sprite(21300, 1770, "yellowbutt").setScale(1.5);
+  yellowbutt3 = this.add.sprite(10680, 210, "yellowbutt").setScale(1.5);
+  bluebutt1 = this.add.sprite(2220, 1410, "bluebutt").setScale(1.5);
+  bluebutt2 = this.add.sprite(19200, 2370, "bluebutt").setScale(1.5);
+  bluebutt3 = this.add.sprite(14580, 2580, "bluebutt").setScale(1.5);
+  orangebutt1 = this.add.sprite(8010, 1020, "orangebutt").setScale(1.5);
+  orangebutt2 = this.add.sprite(25890, 2190, "orangebutt").setScale(1.5);
+  orangebutt3 = this.add.sprite(15420, 420, "orangebutt").setScale(1.5);
+  pinkbutt1 = this.add.sprite(19560, 2400, "pinkbutt").setScale(1.5);
+  pinkbutt2 = this.add.sprite(2580, 1410, "pinkbutt").setScale(1.5);
+  pinkbutt3 = this.add.sprite(2370, 810, "pinkbutt").setScale(1.5);
 
   finish = this.physics.add.sprite(22840, 450, "finish").setScale(1.2);
 
@@ -266,7 +265,7 @@ GameScene.create = function() {
   this.anims.create({
     key: "bat1",
     frames: this.anims.generateFrameNumbers("bat1", { start: 0, end: 36 }),
-    frameRate: 10,
+    frameRate: 11,
     repeat: -1
   });
 
@@ -289,14 +288,14 @@ GameScene.create = function() {
     key: "orangebutt",
     frames: this.anims.generateFrameNumbers("orangebutt", {
       start: 0,
-      end: 36
+      end: 19
     }),
     frameRate: 10,
     repeat: -1
   });
   this.anims.create({
     key: "pinkbutt",
-    frames: this.anims.generateFrameNumbers("pinkbutt", { start: 0, end: 36 }),
+    frames: this.anims.generateFrameNumbers("pinkbutt", { start: 0, end: 19 }),
     frameRate: 10,
     repeat: -1
   });
