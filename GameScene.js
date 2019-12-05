@@ -30,7 +30,7 @@ var GameScene = new Phaser.Scene("gamescene");
 
 GameScene.preload = function() {
   this.load.audio("song", ["assets/furretwalk.ogg", "assets/furretwalk.mp3"]);
-  this.load.audio("jump", "assets/mjump.mp3");
+  this.load.audio("jump", "assets/Jump.ogg");
   this.load.image("background", "assets/background.png"); //plano de fundo
   this.load.image("spike", "assets/spikes_1.png");
   this.load.image("tileset", "assets/tileset.png");
@@ -38,7 +38,7 @@ GameScene.preload = function() {
   this.load.image("decor", "assets/decor.png");
   this.load.image("darkbush", "assets/darkbush.png");
   this.load.image("bush", "assets/bush.png");
- // this.load.image("bat", "assets/bat.png");
+  // this.load.image("bat", "assets/bat.png");
   this.load.image("tree", "assets/tree.png");
   this.load.spritesheet("player", "assets/Bunny.png", {
     frameWidth: 40,
@@ -76,9 +76,9 @@ GameScene.create = function() {
   song = this.sound.add("song");
   jump = this.sound.add("jump");
 
-  song.play({
+  /* song.play({
     loop: true
-  });
+  }); */
 
   this.physics.world.setBounds(0, 0, 27000, 3000);
 
@@ -219,11 +219,17 @@ GameScene.create = function() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
-  this.cameras.main.setBounds(0, 0, 27000, 3000).setSize(920, 390).setZoom(0.75);
+  this.cameras.main
+    .setBounds(0, 0, 27000, 3000)
+    .setSize(720, 240)
+    .setZoom(0.5);
 
   this.cameras.main.startFollow(player, true, 0.5, 0.5);
-  this.cameras.add(0, 390, 920, 390).startFollow(player2, true, 0.5, 0.5).setBounds(0, 0, 27000, 3000).setZoom(0.75);
-
+  this.cameras
+    .add(0, 240, 720, 240)
+    .startFollow(player2, true, 0.5, 0.5)
+    .setBounds(0, 0, 27000, 3000)
+    .setZoom(0.5);
 
   this.physics.add.collider(player, camadatile);
   this.physics.add.collider(player2, camadatile);
@@ -330,7 +336,9 @@ GameScene.update = function() {
 
 function reduzirScore() {
   score -= 10;
-  scoreText.setText("score: " + score); /*
+  scoreText.setText(
+    "score: " + score
+  ); /*
   if (velocidade < 800) {
     velocidade += 5;
   } */
