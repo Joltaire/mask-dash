@@ -2,7 +2,7 @@
 import { victory } from "./victory.js";
 export { GameScene };
 
-var player; //personagem
+var player1; //personagem
 var player2; //personagem secundário
 var ground; //chão principal
 var platform; //plataformas
@@ -43,7 +43,8 @@ var timedEvent;
 var graphics;
 var gameOver = false;
 var moveCam = true;
-var velocidade = 600;
+var velocidade = 800;
+var velocidade2 = 800;
 
 var GameScene = new Phaser.Scene("gamescene");
 
@@ -84,7 +85,7 @@ GameScene.preload = function() {
     frameWidth: 50,
     frameHeight: 30
   });
-  this.load.spritesheet("player", "assets/Bunny.png", {
+  this.load.spritesheet("player1", "assets/Bunny.png", {
     frameWidth: 40,
     frameHeight: 96
   });
@@ -185,10 +186,10 @@ GameScene.create = function() {
 
   finish = this.physics.add.sprite(22840, 450, "finish").setScale(1.2);
 
-  player = this.physics.add.sprite(500, 715, "player"); //você :)
+  player1 = this.physics.add.sprite(500, 715, "player1"); //você :)
 
-  player.setBounce(0);
-  player.setCollideWorldBounds(true);
+  player1.setBounce(0);
+  player1.setCollideWorldBounds(true);
 
   player2 = this.physics.add.sprite(500, 715, "player2"); //fren
   player2.setBounce(0);
@@ -197,7 +198,7 @@ GameScene.create = function() {
   //animações
   this.anims.create({
     key: "left",
-    frames: this.anims.generateFrameNumbers("player", {
+    frames: this.anims.generateFrameNumbers("player1", {
       start: 2,
       end: 6
     }),
@@ -207,7 +208,7 @@ GameScene.create = function() {
 
   this.anims.create({
     key: "turn",
-    frames: this.anims.generateFrameNumbers("player", {
+    frames: this.anims.generateFrameNumbers("player1", {
       start: 0,
       end: 1
     }),
@@ -217,7 +218,7 @@ GameScene.create = function() {
 
   this.anims.create({
     key: "right",
-    frames: this.anims.generateFrameNumbers("player", {
+    frames: this.anims.generateFrameNumbers("player1", {
       start: 7,
       end: 11
     }),
@@ -315,16 +316,16 @@ GameScene.create = function() {
 
   //timedEvent = this.time.delayedCall(300, reduzirScore, [], this);
   //colisões: "objeto [x] colide com [x]"
-  this.physics.add.collider(player, ground);
-  this.physics.add.collider(player, platform);
-  this.physics.add.collider(player, platformsmall);
+  this.physics.add.collider(player1, ground);
+  this.physics.add.collider(player1, platform);
+  this.physics.add.collider(player1, platformsmall);
   this.physics.add.collider(player2, ground);
   this.physics.add.collider(player2, platform);
   this.physics.add.collider(player2, platformsmall);
 
-  this.physics.add.collider(player, spike, hitSpike, null, this);
-  this.physics.add.collider(player2, spike, hitSpike, null, this);
-  this.physics.add.collider(player, finish, hitFinish, null, this);
+  this.physics.add.collider(player1, spike, hitSpike, null, this);
+  this.physics.add.collider(player2, spike, hitSpiky, null, this);
+  this.physics.add.collider(player1, finish, hitFinish, null, this);
   this.physics.add.collider(player2, finish, hitFinish, null, this);
 
   cursors = this.input.keyboard.createCursorKeys(); //pros botão funcionar
@@ -338,14 +339,14 @@ GameScene.create = function() {
     .setSize(720, 240)
     .setZoom(0.5);
 
-  this.cameras.main.startFollow(player, true, 0.5, 0.5);
+  this.cameras.main.startFollow(player1, true, 0.5, 0.5);
   this.cameras
     .add(0, 240, 720, 240)
     .startFollow(player2, true, 0.5, 0.5)
     .setBounds(0, 0, 27000, 3000)
     .setZoom(0.5);
 
-  this.physics.add.collider(player, camadatile);
+  this.physics.add.collider(player1, camadatile);
   this.physics.add.collider(player2, camadatile);
   this.physics.add.collider(finish, camadatile);
 
@@ -425,31 +426,31 @@ GameScene.update = function() {
   }
 
   if (cursors.left.isDown) {
-    player.setVelocityX(-velocidade);
+    player1.setVelocityX(-velocidade);
 
-    player.anims.play("left", true);
+    player1.anims.play("left", true);
   } else if (cursors.right.isDown) {
-    player.setVelocityX(velocidade);
+    player1.setVelocityX(velocidade);
 
-    player.anims.play("right", true);
+    player1.anims.play("right", true);
   } else {
-    player.setVelocityX(0);
+    player1.setVelocityX(0);
 
-    player.anims.play("turn", true);
+    player1.anims.play("turn", true);
   }
 
-  if (cursors.up.isDown && player.body.blocked.down) {
-    player.setVelocityY(-700);
+  if (cursors.up.isDown && player1.body.blocked.down) {
+    player1.setVelocityY(-700);
     jump.play({
       loop: false
     });
   }
   if (keyA.isDown) {
-    player2.setVelocityX(-velocidade);
+    player2.setVelocityX(-velocidade2);
 
     player2.anims.play("left2", true);
   } else if (keyD.isDown) {
-    player2.setVelocityX(velocidade);
+    player2.setVelocityX(velocidade2);
 
     player2.anims.play("right2", true);
   } else {
@@ -470,15 +471,18 @@ function reduzirScore() {
   score -= 10;
   scoreText.setText("score: " + score);
   if (velocidade < 800) {
-    velocidade += 5;
+    velocidade += 15;
+  }
+  if (velocidade2 < 800) {
+    velocidade2 += 15;
   }
 }
 
-function hitFinish(player, finish) {
+function hitFinish(player1, finish) {
   //this.physics.pause();
   this.physics.pause();
 
-  player.anims.play("turn");
+  player1.anims.play("turn");
 
   gameOver = true;
   song.stop();
@@ -492,8 +496,21 @@ function hitSpike(player, spike) {
 
   player.setVelocityY(-600);
   player.setVelocityX(velocidade);
-  if (velocidade > 199) {
-    velocidade -= 200;
+  if (velocidade > 301) {
+    velocidade -= 500;
+  }
+  console.log(velocidade);
+}
+
+function hitSpiky(player2, spike) {
+  //this.physics.pause();
+
+  player2.anims.play("turn");
+
+  player2.setVelocityY(-600);
+  player2.setVelocityX(velocidade2);
+  if (velocidade2 > 301) {
+    velocidade2 -= 500;
   }
   console.log(velocidade);
 }
