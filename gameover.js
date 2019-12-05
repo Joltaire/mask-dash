@@ -38,6 +38,44 @@ gameover.create = function() {
     loop: true
   });
 
+  var button = this.add
+    .image()
+    .setOrigin(1, 0)
+    .setInteractive();
+
+  button.on(
+    "pointerup",
+    function() {
+      if (this.scale.isFullscreen) {
+        button.setFrame(0);
+
+        this.scale.stopFullscreen();
+      } else {
+        button.setFrame(1);
+
+        this.scale.startFullscreen();
+      }
+    },
+    this
+  );
+
+  var FKey = this.input.keyboard.addKey("F");
+
+  FKey.on(
+    "down",
+    function() {
+      if (this.scale.isFullscreen) {
+        button.setFrame(0);
+        this.scale.stopFullscreen();
+      } else {
+        button.setFrame(1);
+        this.scale.startFullscreen();
+      }
+    },
+    this
+  );
+};
+
   if (this.sound.locked) {
     this.sound.once(
       "unlocked",

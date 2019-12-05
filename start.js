@@ -25,15 +25,50 @@ start.create = function() {
     repeat: -1
   });
 
-  this.add
-    .sprite(360, 240, "start")
-    .play("begin");
+  this.add.sprite(360, 240, "start").play("begin");
 
   var theme = this.sound.add("theme");
 
   theme.play({
     loop: true
   });
+
+  var button = this.add
+    .image()
+    .setOrigin(1, 0)
+    .setInteractive();
+
+  button.on(
+    "pointerup",
+    function() {
+      if (this.scale.isFullscreen) {
+        button.setFrame(0);
+
+        this.scale.stopFullscreen();
+      } else {
+        button.setFrame(1);
+
+        this.scale.startFullscreen();
+      }
+    },
+    this
+  );
+
+  var FKey = this.input.keyboard.addKey("F");
+
+  FKey.on(
+    "down",
+    function() {
+      if (this.scale.isFullscreen) {
+        button.setFrame(0);
+        this.scale.stopFullscreen();
+      } else {
+        button.setFrame(1);
+        this.scale.startFullscreen();
+      }
+    },
+    this
+  );
 
   if (this.sound.locked) {
     this.sound.once(
