@@ -219,6 +219,7 @@ GameScene.create = function() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
+
   this.cameras.main
     .setBounds(0, 0, 27000, 3000)
     .setSize(720, 240)
@@ -230,6 +231,7 @@ GameScene.create = function() {
     .startFollow(player2, true, 0.5, 0.5)
     .setBounds(0, 0, 27000, 3000)
     .setZoom(0.5);
+
 
   this.physics.add.collider(player, camadatile);
   this.physics.add.collider(player2, camadatile);
