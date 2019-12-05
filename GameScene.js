@@ -1,3 +1,4 @@
+
 //import { gameover } from "./gameover.js";
 import { victory } from "./victory.js";
 export { GameScene };
@@ -9,12 +10,31 @@ var platform; //plataformas
 var platformsmall; //plataformas pequenas
 var cursors;
 var spike;
+var bat1;
+var bat2;
+var bat3;
+var yellowbutt1;
+var yellowbutt2;
+var yellowbutt3;
+var bluebutt1;
+var bluebutt2;
+var bluebutt3;
+var orangebutt1;
+var orangebutt2;
+var orangebutt3;
+var pinkbutt1;
+var pinkbutt2;
+var pinkbutt3;
+var battwo1;
+var battwo2;
+var battwo3;
 var finish;
 var keyW;
 var keyA;
 var keyD;
 var song;
 var jump;
+var jump0;
 var pointer;
 //var touchX;
 //var touchY;
@@ -29,10 +49,11 @@ var velocidade = 600;
 var GameScene = new Phaser.Scene("gamescene");
 
 GameScene.preload = function() {
-  this.load.audio("song", ["assets/furretwalk.ogg", "assets/furretwalk.mp3"]);
+  this.load.audio("song", "assets/bgm.ogg");
   this.load.audio("jump", "assets/Jump.ogg");
+  this.load.audio("jump0", "assets/JumpO.ogg");
   this.load.image("background", "assets/background.png"); //plano de fundo
-  this.load.image("spike", "assets/spikes_1.png");
+  this.load.image("spike", "assets/spikes.png");
   this.load.image("tileset", "assets/tileset.png");
   this.load.image("caverna", "assets/caverna.png");
   this.load.image("decor", "assets/decor.png");
@@ -40,6 +61,30 @@ GameScene.preload = function() {
   this.load.image("bush", "assets/bush.png");
   // this.load.image("bat", "assets/bat.png");
   this.load.image("tree", "assets/tree.png");
+  this.load.spritesheet("bat1", "assets/bat.png", {
+    frameWidth: 640,
+    frameHeight: 200
+  });
+  this.load.spritesheet("bat2", "assets/battwo.png", {
+    frameWidth: 640,
+    frameHeight: 200
+  });
+  this.load.spritesheet("yellowbutt", "assets/butterfly.png", {
+    frameWidth: 60,
+    frameHeight: 30
+  });
+  this.load.spritesheet("bluebutt", "assets/butterflytwo.png", {
+    frameWidth: 60,
+    frameHeight: 30
+  });
+  this.load.spritesheet("orangebutt", "assets/butterflythree.png", {
+    frameWidth: 50,
+    frameHeight: 30
+  });
+  this.load.spritesheet("pinkbutt", "assets/butterflyfour.png", {
+    frameWidth: 50,
+    frameHeight: 30
+  });
   this.load.spritesheet("player", "assets/Bunny.png", {
     frameWidth: 40,
     frameHeight: 96
@@ -73,12 +118,13 @@ GameScene.preload = function() {
 };
 
 GameScene.create = function() {
-  song = this.sound.add("song");
-  jump = this.sound.add("jump");
+  song = this.sound.add("song", { volume: 0.3 });
+  jump = this.sound.add("jump", { volume: 0.2 });
+  jump0 = this.sound.add("jump0", { volume: 0.2 });
 
-  /* song.play({
+  song.play({
     loop: true
-  }); */
+  });
 
   this.physics.world.setBounds(0, 0, 27000, 3000);
 
@@ -97,7 +143,6 @@ GameScene.create = function() {
   var terrain4 = map.addTilesetImage("darkbush", "darkbush");
   var terrain5 = map.addTilesetImage("bush", "bush");
   var terrain6 = map.addTilesetImage("tree", "tree");
-  //var terrain7 = map.addTilesetImage("bat", "bat");
 
   var camadatile4 = map.createStaticLayer("sky", [terrain3], 0, -25);
   var camadatile3 = map.createStaticLayer("caverna", [terrain3], -2, -90);
@@ -106,13 +151,39 @@ GameScene.create = function() {
   var camadatile7 = map.createStaticLayer("bush", [terrain5], 0, -50);
   var camadatile2 = map.createStaticLayer("decor", [terrain2], 0, -34);
   var camadatile = map.createStaticLayer("mapa", [terrain], 0, 0);
-  //var camadatile8 = map.createStaticLayer("bat", [terrain7], 350, -100);
 
   spike = this.physics.add.staticGroup();
   //finish = this.physics.add.staticGroup();
 
-  //spike.create(2500, 1910, "spike");
-  //spike.create(2575, 1910, "spike");
+  spike.create(475, 600, "spike");
+  spike.create(550, 600, "spike");
+  spike.create(475, 600, "spike");
+  spike.create(550, 600, "spike");
+  spike.create(475, 600, "spike");
+  spike.create(550, 600, "spike");
+  spike.create(475, 600, "spike");
+  spike.create(550, 600, "spike");
+  spike.create(475, 600, "spike");
+  spike.create(550, 600, "spike");
+  bat1 = this.add.sprite(800, 715, "bat1");
+  bat2 = this.add.sprite(800, 800, "bat1");
+  bat3 = this.add.sprite(800, 885, "bat1");
+  battwo1 = this.add.sprite(1000, 715, "bat2");
+  battwo2 = this.add.sprite(1000, 800, "bat2");
+  battwo3 = this.add.sprite(1000, 885, "bat2");
+  yellowbutt1 = this.add.sprite(400, 700, "yellowbutt").setScale(1.5);
+  yellowbutt2 = this.add.sprite(400, 650, "yellowbutt").setScale(1.5);
+  yellowbutt3 = this.add.sprite(400, 600, "yellowbutt").setScale(1.5);
+  bluebutt1 = this.add.sprite(350, 700, "bluebutt").setScale(1.5);
+  bluebutt2 = this.add.sprite(350, 650, "bluebutt").setScale(1.5);
+  bluebutt3 = this.add.sprite(350, 600, "bluebutt").setScale(1.5);
+  orangebutt1 = this.add.sprite(300, 700, "orangebutt").setScale(1.5);
+  orangebutt2 = this.add.sprite(300, 650, "orangebutt").setScale(1.5);
+  orangebutt3 = this.add.sprite(300, 600, "orangebutt").setScale(1.5);
+  pinkbutt1 = this.add.sprite(250, 700, "pinkbutt").setScale(1.5);
+  pinkbutt2 = this.add.sprite(250, 650, "pinkbutt").setScale(1.5);
+  pinkbutt3 = this.add.sprite(250, 600, "pinkbutt").setScale(1.5);
+
   finish = this.physics.add.sprite(22840, 450, "finish").setScale(1.2);
 
   player = this.physics.add.sprite(500, 715, "player"); //você :)
@@ -192,6 +263,50 @@ GameScene.create = function() {
     repeat: -1
   });
 
+  this.anims.create({
+    key: "bat1",
+    frames: this.anims.generateFrameNumbers("bat1", { start: 0, end: 36 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: "yellowbutt",
+    frames: this.anims.generateFrameNumbers("yellowbutt", {
+      start: 0,
+      end: 26
+    }),
+    frameRate: 10,
+    repeat: -1
+  });
+  this.anims.create({
+    key: "bluebutt",
+    frames: this.anims.generateFrameNumbers("bluebutt", { start: 0, end: 26 }),
+    frameRate: 10,
+    repeat: -1
+  });
+  this.anims.create({
+    key: "orangebutt",
+    frames: this.anims.generateFrameNumbers("orangebutt", {
+      start: 0,
+      end: 36
+    }),
+    frameRate: 10,
+    repeat: -1
+  });
+  this.anims.create({
+    key: "pinkbutt",
+    frames: this.anims.generateFrameNumbers("pinkbutt", { start: 0, end: 36 }),
+    frameRate: 10,
+    repeat: -1
+  });
+  this.anims.create({
+    key: "bat2",
+    frames: this.anims.generateFrameNumbers("bat2", { start: 0, end: 36 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
   scoreText = this.add
     .text(-175, -150, "score: 50000", {
       fontSize: "32px",
@@ -219,7 +334,6 @@ GameScene.create = function() {
   keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   pointer = this.input.addPointer(1);
 
-
   this.cameras.main
     .setBounds(0, 0, 27000, 3000)
     .setSize(720, 240)
@@ -231,7 +345,6 @@ GameScene.create = function() {
     .startFollow(player2, true, 0.5, 0.5)
     .setBounds(0, 0, 27000, 3000)
     .setZoom(0.5);
-
 
   this.physics.add.collider(player, camadatile);
   this.physics.add.collider(player2, camadatile);
@@ -290,6 +403,24 @@ GameScene.create = function() {
 GameScene.update = function() {
   //teclas pra andar e tal
   finish.anims.play("finish", true);
+  bat1.anims.play("bat1", true);
+  bat2.anims.play("bat1", true);
+  bat3.anims.play("bat1", true);
+  battwo1.anims.play("bat2", true);
+  battwo2.anims.play("bat2", true);
+  battwo3.anims.play("bat2", true);
+  yellowbutt1.anims.play("yellowbutt", true);
+  yellowbutt2.anims.play("yellowbutt", true);
+  yellowbutt3.anims.play("yellowbutt", true);
+  bluebutt1.anims.play("bluebutt", true);
+  bluebutt2.anims.play("bluebutt", true);
+  bluebutt3.anims.play("bluebutt", true);
+  orangebutt1.anims.play("orangebutt", true);
+  orangebutt2.anims.play("orangebutt", true);
+  orangebutt3.anims.play("orangebutt", true);
+  pinkbutt1.anims.play("pinkbutt", true);
+  pinkbutt2.anims.play("pinkbutt", true);
+  pinkbutt3.anims.play("pinkbutt", true);
   if (gameOver) {
     return;
   }
@@ -330,7 +461,7 @@ GameScene.update = function() {
 
   if (keyW.isDown && player2.body.blocked.down) {
     player2.setVelocityY(-700);
-    jump.play({
+    jump0.play({
       loop: false
     });
   }
@@ -338,12 +469,10 @@ GameScene.update = function() {
 
 function reduzirScore() {
   score -= 10;
-  scoreText.setText(
-    "score: " + score
-  ); /*
+  scoreText.setText("score: " + score);
   if (velocidade < 800) {
     velocidade += 5;
-  } */
+  }
 }
 
 function hitFinish(player, finish) {

@@ -7,7 +7,7 @@ var setupSceneInput;
 var victory = new Phaser.Scene("SceneD");
 
 victory.preload = function() {
-  this.load.audio("sorrow", ["assets/sorrow.ogg", "assets/sorrow.mp3"]);
+  this.load.audio("sorrow", "assets/the wind.ogg");
 
   this.load.spritesheet("victory", "assets/victory.png", {
     frameWidth: 420,
@@ -23,7 +23,7 @@ victory.create = function() {
       start: 0,
       end: 10
     }),
-    frameRate: 7,
+    frameRate: 12,
     repeat: -1
   });
 
